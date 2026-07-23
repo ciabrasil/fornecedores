@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Cadastro de Fornecedores - Ciabrasil</title>
+
+<style>
+
+body{
+    font-family:Arial, sans-serif;
+    max-width:900px;
+    margin:40px auto;
+    padding:20px;
+}
+
+h1{
+    color:#0A68A7;
+}
+
+input{
+    width:100%;
+    padding:10px;
+    margin-bottom:15px;
+}
+
+button{
+    padding:10px 20px;
+    background:#0A68A7;
+    color:white;
+    border:none;
+}
+
+</style>
+
+</head>
+<body>
+
+<h1>Cadastro de Fornecedores</h1>
+
+<label>CNPJ</label>
+<input id="cnpj">
+
+<button onclick="consultarCNPJ()">
+Consultar
+</button>
+
+<br><br>
+
+<label>Razão Social</label>
+<input id="razaoSocial">
+
+<label>Nome Fantasia</label>
+<input id="nomeFantasia">
+
+<script>
+
+async function consultarCNPJ(){
+
+    const cnpj =
+      document.getElementById("cnpj")
+      .value.replace(/\D/g,'');
+
+    const resposta =
+      await fetch(
+      `https://brasilapi.com.br/api/cnpj/v1/${cnpj}`
+      );
+
+    const dados =
+      await resposta.json();
+
+    document.getElementById(
+      "razaoSocial"
+    ).value =
+      dados.razao_social || '';
+
+    document.getElementById(
+      "nomeFantasia"
+    ).value =
+      dados.nome_fantasia || '';
+
+}
+
+</script>
+
+</body>
+</html>
