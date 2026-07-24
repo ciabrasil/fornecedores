@@ -1,4 +1,5 @@
 :root{
+    .oculto{ display:none; }
     --azul:#0A68A7;
     --verde:#AFCA0A;
 }
