@@ -13,6 +13,11 @@ function irParaFormulario() {
     document.getElementById("tela-boas-vindas").classList.add("oculto");
     document.getElementById("tela-formulario").classList.remove("oculto");
     renderStepper();
+
+    // NOVO: garante o estado correto dos botões já na etapa 1
+    document.getElementById("btnVoltar").style.visibility = "hidden";
+    document.getElementById("btnAvancar").classList.remove("oculto");
+    document.getElementById("btnEnviar").classList.add("oculto");
 }
 
 /* ===================== STEPPER ===================== */
@@ -100,6 +105,11 @@ async function consultarCNPJ() {
         ].filter(Boolean).join(", ");
         document.getElementById("endereco").value = partesEndereco;
 
+        // NOVO: já traz os CNAEs secundários da Receita como chips
+        (dados.cnaes_secundarios || []).forEach(c => {
+            if (c.codigo) adicionarCnaeSecundario(c.codigo, c.descricao || "");
+        });
+
         // A BrasilAPI não retorna Inscrição Estadual/Municipal — o fornecedor completa manualmente.
         statusEl.textContent = "Dados carregados. Confira e complete o restante do formulário.";
     } catch (erro) {
@@ -177,6 +187,33 @@ function renderChipsCnae() {
     });
 }
 
+/* ===================== TRIBUTOS APLICÁVEIS (ETAPA 2) ===================== */
+// NOVO: o campo de % só fica habilitado quando o tributo é marcado.
+function configurarTributos() {
+    document.querySelectorAll(".chk-tributo").forEach(chk => {
+        chk.addEventListener("change", () => {
+            const alvo = document.getElementById(chk.dataset.alvo);
+            if (!alvo) return;
+            alvo.disabled = !chk.checked;
+            if (!chk.checked) alvo.value = "";
+            else alvo.focus();
+        });
+    });
+}
+
+// NOVO: monta a lista só dos tributos que o fornecedor marcou.
+function coletarTributos() {
+    const marcados = [];
+    document.querySelectorAll(".chk-tributo:checked").forEach(chk => {
+        const alvo = document.getElementById(chk.dataset.alvo);
+        marcados.push({
+            tributo: chk.parentElement.textContent.trim(),
+            aliquota: alvo ? alvo.value : ""
+        });
+    });
+    return marcados;
+}
+
 /* ===================== UPLOAD DA PLANILHA ===================== */
 document.getElementById("planilhaProdutos").addEventListener("change", (e) => {
     const arquivo = e.target.files[0];
@@ -209,6 +246,13 @@ async function enviarFormulario() {
     const arquivoInput = document.getElementById("planilhaProdutos");
     const arquivoBase64 = await arquivoParaBase64(arquivoInput.files[0]);
 
+    // NOVO: lê os tributos marcados
+    const tributosAplicaveis = coletarTributos();
+    const valor = (id) => {
+        const el = document.getElementById(id);
+        return el ? el.value : "";
+    };
+
     const payload = {
         dataEnvio: new Date().toISOString(),
         cnpj: document.getElementById("cnpj").value,
@@ -225,10 +269,13 @@ async function enviarFormulario() {
         cnaePrincipal: document.getElementById("cnaePrincipal").value,
         cnaesSecundarios: cnaesSecundarios,
 
-        aliquotaIcms: document.getElementById("aliquotaIcms").value,
-        aliquotaPis: document.getElementById("aliquotaPis").value,
-        aliquotaCofins: document.getElementById("aliquotaCofins").value,
-        aliquotaIss: document.getElementById("aliquotaIss").value,
+        // NOVO: tributos aplicáveis (checkbox + %). Envia lista + campos individuais.
+        tributosAplicaveis: tributosAplicaveis,
+        aliquotaIcms: valor("aliquotaIcms"),
+        aliquotaIpi: valor("aliquotaIpi"),
+        aliquotaPis: valor("aliquotaPis"),
+        aliquotaCofins: valor("aliquotaCofins"),
+        aliquotaIss: valor("aliquotaIss"),
         beneficiosFiscais: document.getElementById("beneficiosFiscais").value,
         creditosAcumulados: document.getElementById("creditosAcumulados").value,
 
@@ -271,3 +318,7 @@ async function enviarFormulario() {
         btnEnviar.textContent = "Enviar Cadastro";
     }
 }
+
+/* ===================== INICIALIZAÇÃO ===================== */
+// NOVO: liga os checkboxes de tributos assim que a página carrega
+configurarTributos();
