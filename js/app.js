@@ -1,18 +1,21 @@
-async function consultarCNPJ(){
+async function consultarCNPJ() {
 
-    try{
+    try {
 
         const cnpj =
             document.getElementById("cnpj")
-            .value.replace(/\D/g,'');
+            .value.replace(/\D/g, '');
 
         const resposta =
             await fetch(
-            `https://brasilapi.com.br/api/cnpj/v1/${cnpj}`
+                `https://brasilapi.com.br/api/cnpj/v1/${cnpj}`
             );
 
-        const dados =
-            await resposta.json();
+        if (!resposta.ok) {
+            throw new Error("Erro ao consultar CNPJ");
+        }
+
+        const dados = await resposta.json();
 
         document.getElementById("razaoSocial").value =
             dados.razao_social || '';
@@ -39,11 +42,14 @@ async function consultarCNPJ(){
             dados.cnae_fiscal_descricao || '';
 
     }
-    catch{
+    catch (error) {
 
-        alert("Não foi possível consultar o CNPJ.");
+        console.error(error);
+
+        alert(
+            "Não foi possível consultar o CNPJ."
+        );
 
     }
 
 }
-
