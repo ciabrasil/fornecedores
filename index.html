@@ -1,42 +1,28 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
     <title>Cadastro de Fornecedores - Ciabrasil</title>
-
-    <linktyle.css
+    <link rel="stylesheet" href="css/style.css">
 </head>
-
 <body>
-
 <div class="container">
-
     <div class="topo">
-
-        logo-ciabrasil.png
-
+        <img src="logo-ciabrasil.png" alt="Ciabrasil">
         <div>
             <h1>Cadastro de Fornecedores</h1>
-
             <div class="subtitulo">
                 Preencha os dados para análise cadastral.
             </div>
         </div>
-
     </div>
-
     <h2>Dados da empresa</h2>
-
     <div class="grid">
-
         <div class="full">
             <label>CNPJ</label>
             <input id="cnpj">
         </div>
-
         <div class="full">
             <button
                 class="btn-consultar"
@@ -44,94 +30,71 @@
                 Consultar CNPJ
             </button>
         </div>
-
         <div class="full">
             <label>Razão Social</label>
             <input id="razaoSocial" readonly>
         </div>
-
         <div class="full">
             <label>Nome Fantasia</label>
             <input id="nomeFantasia" readonly>
         </div>
-
         <div>
             <label>Cidade</label>
             <input id="cidade" readonly>
         </div>
-
         <div>
             <label>UF</label>
             <input id="uf" readonly>
         </div>
-
         <div>
             <label>CEP</label>
             <input id="cep" readonly>
         </div>
-
         <div>
             <label>Telefone</label>
             <input id="telefone" readonly>
         </div>
-
         <div class="full">
             <label>Situação Cadastral</label>
             <input id="situacao" readonly>
         </div>
-
         <div class="full">
             <label>CNAE Principal</label>
             <input id="cnae" readonly>
         </div>
-
     </div>
-
     <h2>Contato</h2>
-
     <div class="grid">
-
         <div>
             <label>Responsável</label>
             <input id="responsavel">
         </div>
-
         <div>
             <label>E-mail</label>
             <input id="email">
         </div>
-
         <div>
             <label>Celular</label>
             <input id="celular">
         </div>
-
         <div>
             <label>Regime Tributário</label>
-
             <select id="regime">
                 <option>Selecione...</option>
                 <option>Simples Nacional</option>
                 <option>Lucro Presumido</option>
                 <option>Lucro Real</option>
             </select>
-
         </div>
-
         <div class="full">
             <label>Observações</label>
             <textarea id="observacoes"></textarea>
         </div>
-
     </div>
-
     <button class="btn-enviar">
         Enviar Cadastro
     </button>
-
 </div>
-
-js/app.jsscript>
-
+<script src="js/app.js"></script>
 </body>
 </html>
