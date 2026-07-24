@@ -212,6 +212,56 @@ button{
     font-size:1rem;
 }
 
+/* ===== NOVO: Tributos aplicáveis (Etapa 2) ===== */
+.info-tributos{
+    background:#eef4fa;
+    border-left:4px solid var(--azul);
+    padding:12px 15px;
+    border-radius:6px;
+    font-size:.88rem;
+    color:#444;
+    line-height:1.5;
+    margin-bottom:20px;
+}
+.tributos{
+    display:flex;
+    flex-direction:column;
+    gap:12px;
+    margin-bottom:25px;
+}
+.tributo-linha{
+    display:flex;
+    align-items:center;
+    gap:15px;
+    padding:10px 14px;
+    border:1px solid #e5e5e5;
+    border-radius:6px;
+    background:#fafbfc;
+}
+.tributo-linha .check{
+    display:flex;
+    align-items:center;
+    gap:8px;
+    min-width:130px;
+    margin-bottom:0;
+    font-weight:600;
+    cursor:pointer;
+}
+.tributo-linha .check input{
+    width:auto;
+    margin:0;
+    cursor:pointer;
+}
+.tributo-linha .pct{
+    max-width:200px;
+}
+.tributo-linha .pct:disabled{
+    background:#f0f0f0;
+    color:#aaa;
+    cursor:not-allowed;
+}
+/* ===== FIM do bloco novo ===== */
+
 /* Navegação entre etapas */
 .navegacao{
     display:flex;
@@ -237,5 +287,14 @@ button{
     }
     .stepper-item{
         font-size:.65rem;
+    }
+    /* NOVO: tributos empilhados no celular */
+    .tributo-linha{
+        flex-direction:column;
+        align-items:flex-start;
+    }
+    .tributo-linha .pct{
+        max-width:100%;
+        width:100%;
     }
 }
