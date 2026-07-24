@@ -2,13 +2,11 @@
     --azul:#0A68A7;
     --verde:#AFCA0A;
 }
-
 body{
     background:#f3f5f7;
     font-family:Segoe UI, Arial, sans-serif;
     margin:0;
 }
-
 .container{
     max-width:1200px;
     margin:30px auto;
@@ -17,7 +15,6 @@ body{
     border-radius:12px;
     box-shadow:0 5px 20px rgba(0,0,0,.08);
 }
-
 .topo{
     display:flex;
     align-items:center;
@@ -26,45 +23,38 @@ body{
     padding-bottom:20px;
     margin-bottom:30px;
 }
-
 .topo img{
     height:55px;
     width:auto;
 }
-
 .topo h1{
     margin:0;
     color:var(--azul);
+    font-size:1.4rem;
 }
-
 .subtitulo{
     color:#666;
     margin-top:5px;
 }
-
 h2{
     color:var(--azul);
     border-bottom:2px solid #e5e5e5;
     padding-bottom:10px;
     margin-top:35px;
 }
-
 .grid{
     display:grid;
     grid-template-columns:1fr 1fr;
     gap:20px;
 }
-
 .full{
     grid-column:1 / 3;
 }
-
 label{
     display:block;
     margin-bottom:6px;
     font-weight:600;
 }
-
 input,
 select,
 textarea{
@@ -73,49 +63,179 @@ textarea{
     border:1px solid #d9d9d9;
     border-radius:6px;
     box-sizing:border-box;
+    font-family:inherit;
 }
-
 input[readonly]{
     background:#f7f7f7;
     color:#555;
 }
-
 textarea{
-    min-height:100px;
+    min-height:90px;
+    resize:vertical;
 }
-
 button{
     border:none;
     padding:14px 25px;
     border-radius:6px;
     cursor:pointer;
     font-weight:bold;
+    font-size:.95rem;
 }
-
 .btn-consultar{
     background:var(--verde);
+    margin-top:4px;
 }
-
-.btn-enviar{
+.btn-primario{
     background:var(--azul);
     color:white;
-    width:100%;
-    margin-top:25px;
+}
+.btn-secundario{
+    background:#e5e5e5;
+    color:#333;
+}
+.btn-enviar{
+    background:var(--verde);
+    color:#1a1a1a;
+}
+.status-consulta{
+    margin-left:12px;
+    font-size:.9rem;
+    color:#555;
+}
+
+/* Telas (boas-vindas / formulário / sucesso) */
+.tela.oculto{
+    display:none;
+}
+.texto-intro{
+    color:#444;
+    line-height:1.6;
+    max-width:700px;
+}
+#tela-boas-vindas,
+#tela-sucesso{
+    text-align:center;
+    padding:40px 10px;
+}
+#tela-boas-vindas .texto-intro,
+#tela-sucesso .texto-intro{
+    margin:0 auto 25px;
+}
+
+/* Stepper */
+.stepper{
+    display:flex;
+    justify-content:space-between;
+    margin-bottom:30px;
+    gap:6px;
+}
+.stepper-item{
+    flex:1;
+    text-align:center;
+    font-size:.75rem;
+    font-weight:600;
+    color:#aaa;
+    padding-bottom:10px;
+    border-bottom:4px solid #e5e5e5;
+}
+.stepper-item.ativo{
+    color:var(--azul);
+    border-bottom-color:var(--azul);
+}
+.stepper-item.concluido{
+    color:var(--verde);
+    border-bottom-color:var(--verde);
+}
+
+/* Etapas */
+.step.oculto{
+    display:none;
+}
+.ajuda{
+    font-size:.85rem;
+    color:#666;
+    margin:0 0 8px;
+}
+.ajuda a{
+    color:var(--azul);
+    font-weight:600;
+}
+
+/* Busca de CNAE secundário */
+.sugestoes{
+    border:1px solid #d9d9d9;
+    border-radius:6px;
+    margin-top:4px;
+    max-height:220px;
+    overflow-y:auto;
+    background:white;
+    position:relative;
+    z-index:5;
+}
+.sugestoes.oculto{
+    display:none;
+}
+.sugestoes div{
+    padding:10px 12px;
+    cursor:pointer;
+    font-size:.9rem;
+    border-bottom:1px solid #f0f0f0;
+}
+.sugestoes div:hover{
+    background:#f3f5f7;
+}
+.chips{
+    display:flex;
+    flex-wrap:wrap;
+    gap:8px;
+    margin-top:12px;
+}
+.chip{
+    background:#eef4fa;
+    border:1px solid var(--azul);
+    color:var(--azul);
+    padding:6px 10px;
+    border-radius:20px;
+    font-size:.85rem;
+    display:flex;
+    align-items:center;
+    gap:8px;
+}
+.chip button{
+    background:none;
+    border:none;
+    color:var(--azul);
+    font-weight:bold;
+    cursor:pointer;
+    padding:0;
+    line-height:1;
+    font-size:1rem;
+}
+
+/* Navegação entre etapas */
+.navegacao{
+    display:flex;
+    justify-content:space-between;
+    margin-top:30px;
+    gap:12px;
+}
+.navegacao .btn-primario,
+.navegacao .btn-enviar{
+    margin-left:auto;
 }
 
 @media(max-width:768px){
-
     .grid{
         grid-template-columns:1fr;
     }
-
     .full{
         grid-column:auto;
     }
-
     .topo{
         flex-direction:column;
         text-align:center;
     }
-
+    .stepper-item{
+        font-size:.65rem;
+    }
 }
