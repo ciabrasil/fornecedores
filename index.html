@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="pt-BR">
+<html lang=
 
 <head>
 <meta charset="UTF-8">
@@ -22,38 +22,42 @@ body{
 
 .container{
     max-width:1200px;
-    margin:40px auto;
+    margin:30px auto;
     background:white;
-    padding:40px;
+    padding:30px;
     border-radius:12px;
     box-shadow:0 5px 20px rgba(0,0,0,.08);
 }
 
 .topo{
-    text-align:center;
-    margin-bottom:40px;
+    display:flex;
+    align-items:center;
+    gap:20px;
+    border-bottom:1px solid #e5e5e5;
+    padding-bottom:20px;
+    margin-bottom:30px;
 }
 
 .topo img{
-    max-height:100px;
-    margin-bottom:20px;
+    height:55px;
+    width:auto;
 }
 
-h1{
-    color:var(--azul);
+.topo h1{
     margin:0;
+    color:var(--azul);
 }
 
 .subtitulo{
     color:#666;
-    margin-top:10px;
+    margin-top:5px;
 }
 
 h2{
     color:var(--azul);
     border-bottom:2px solid #e5e5e5;
     padding-bottom:10px;
-    margin-top:40px;
+    margin-top:35px;
 }
 
 .grid{
@@ -89,12 +93,9 @@ input[readonly]{
 
 textarea{
     min-height:100px;
-    resize:vertical;
 }
 
 button{
-    background:var(--azul);
-    color:white;
     border:none;
     padding:14px 25px;
     border-radius:6px;
@@ -102,18 +103,15 @@ button{
     font-weight:bold;
 }
 
-button:hover{
-    background:#084f80;
-}
-
-.btn-verde{
+.btn-consultar{
     background:var(--verde);
-    color:black;
 }
 
 .btn-enviar{
-    margin-top:30px;
+    background:var(--azul);
+    color:white;
     width:100%;
+    margin-top:25px;
 }
 
 @media(max-width:768px){
@@ -124,6 +122,11 @@ button:hover{
 
     .full{
         grid-column:auto;
+    }
+
+    .topo{
+        flex-direction:column;
+        text-align:center;
     }
 
 }
@@ -137,12 +140,13 @@ button:hover{
 
 <div class="topo">
 
-<img src="logo-ciabrasil.png" alt="Ciabrasil">
+logo-ciabrasil.png
 
+<div>
 <h1>Cadastro de Fornecedores</h1>
-
 <div class="subtitulo">
-Preencha os dados abaixo para análise cadastral.
+Preencha os dados para análise cadastral.
+</div>
 </div>
 
 </div>
@@ -157,9 +161,7 @@ Preencha os dados abaixo para análise cadastral.
 </div>
 
 <div class="full">
-<button
-class="btn-verde"
-onclick="consultarCNPJ()">
+<button class="btn-consultar" onclick="consultarCNPJ()">
 Consultar CNPJ
 </button>
 </div>
@@ -255,45 +257,43 @@ async function consultarCNPJ(){
     try{
 
         const cnpj =
-        document
-        .getElementById("cnpj")
-        .value
-        .replace(/\D/g,'');
+            document.getElementById("cnpj")
+            .value.replace(/\D/g,'');
 
         const resposta =
-        await fetch(
-        `https://brasilapi.com.br/api/cnpj/v1/${cnpj}`
-        );
+            await fetch(
+            `https://brasilapi.com.br/api/cnpj/v1/${cnpj}`
+            );
 
         const dados =
-        await resposta.json();
+            await resposta.json();
 
         document.getElementById("razaoSocial").value =
-        dados.razao_social || '';
+            dados.razao_social || '';
 
         document.getElementById("nomeFantasia").value =
-        dados.nome_fantasia || '';
+            dados.nome_fantasia || '';
 
         document.getElementById("cidade").value =
-        dados.municipio || '';
+            dados.municipio || '';
 
         document.getElementById("uf").value =
-        dados.uf || '';
+            dados.uf || '';
 
         document.getElementById("cep").value =
-        dados.cep || '';
+            dados.cep || '';
 
         document.getElementById("telefone").value =
-        dados.ddd_telefone_1 || '';
+            dados.ddd_telefone_1 || '';
 
         document.getElementById("situacao").value =
-        dados.descricao_situacao_cadastral || '';
+            dados.descricao_situacao_cadastral || '';
 
         document.getElementById("cnae").value =
-        dados.cnae_fiscal_descricao || '';
+            dados.cnae_fiscal_descricao || '';
 
     }
-    catch(error){
+    catch{
 
         alert("Não foi possível consultar o CNPJ.");
 
