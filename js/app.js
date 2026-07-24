@@ -4,7 +4,7 @@ async function consultarCNPJ() {
 
         const cnpj =
             document.getElementById("cnpj")
-            .value.replace(/\D/g, '');
+            .value.replace(/\D/g, "");
 
         const resposta =
             await fetch(
@@ -18,37 +18,35 @@ async function consultarCNPJ() {
         const dados = await resposta.json();
 
         document.getElementById("razaoSocial").value =
-            dados.razao_social || '';
+            dados.razao_social || "";
 
         document.getElementById("nomeFantasia").value =
-            dados.nome_fantasia || '';
+            dados.nome_fantasia || "";
 
         document.getElementById("cidade").value =
-            dados.municipio || '';
+            dados.municipio || "";
 
         document.getElementById("uf").value =
-            dados.uf || '';
+            dados.uf || "";
 
         document.getElementById("cep").value =
-            dados.cep || '';
+            dados.cep || "";
 
         document.getElementById("telefone").value =
-            dados.ddd_telefone_1 || '';
+            dados.ddd_telefone_1 || "";
 
         document.getElementById("situacao").value =
-            dados.descricao_situacao_cadastral || '';
+            dados.descricao_situacao_cadastral || "";
 
         document.getElementById("cnae").value =
-            dados.cnae_fiscal_descricao || '';
+            dados.cnae_fiscal_descricao || "";
 
     }
     catch (error) {
 
         console.error(error);
 
-        alert(
-            "Não foi possível consultar o CNPJ."
-        );
+        alert("Não foi possível consultar o CNPJ.");
 
     }
 
