@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
+
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
@@ -9,33 +10,58 @@
 <style>
 
 body{
-    font-family:Arial, sans-serif;
+    background:#f5f7fa;
+    font-family:Segoe UI, Arial, sans-serif;
+}
+
+.container{
     max-width:900px;
     margin:40px auto;
-    padding:20px;
+    background:white;
+    padding:30px;
+    border-radius:10px;
+    box-shadow:0 2px 10px rgba(0,0,0,.1);
 }
 
 h1{
     color:#0A68A7;
 }
 
+label{
+    display:block;
+    margin-top:15px;
+    font-weight:bold;
+}
+
 input{
     width:100%;
-    padding:10px;
-    margin-bottom:15px;
+    padding:12px;
+    border:1px solid #d9d9d9;
+    border-radius:6px;
+    box-sizing:border-box;
 }
 
 button{
-    padding:10px 20px;
     background:#0A68A7;
     color:white;
     border:none;
+    padding:12px 20px;
+    margin-top:15px;
+    border-radius:6px;
+    cursor:pointer;
+}
+
+button:hover{
+    background:#085585;
 }
 
 </style>
 
 </head>
+
 <body>
+
+<div class="container">
 
 <h1>Cadastro de Fornecedores</h1>
 
@@ -43,10 +69,8 @@ button{
 <input id="cnpj">
 
 <button onclick="consultarCNPJ()">
-Consultar
+Consultar CNPJ
 </button>
-
-<br><br>
 
 <label>Razão Social</label>
 <input id="razaoSocial">
@@ -54,31 +78,76 @@ Consultar
 <label>Nome Fantasia</label>
 <input id="nomeFantasia">
 
+<label>Cidade</label>
+<input id="cidade">
+
+<label>UF</label>
+<input id="uf">
+
+<label>CEP</label>
+<input id="cep">
+
+<label>Telefone</label>
+<input id="telefone">
+
+<label>Situação Cadastral</label>
+<input id="situacao">
+
+<label>CNAE Principal</label>
+<input id="cnae">
+
+</div>
+
 <script>
 
 async function consultarCNPJ(){
 
-    const cnpj =
-      document.getElementById("cnpj")
-      .value.replace(/\D/g,'');
+    try{
 
-    const resposta =
-      await fetch(
-      `https://brasilapi.com.br/api/cnpj/v1/${cnpj}`
-      );
+        const cnpj =
+            document
+            .getElementById("cnpj")
+            .value
+            .replace(/\D/g,'');
 
-    const dados =
-      await resposta.json();
+        const resposta =
+            await fetch(
+            `https://brasilapi.com.br/api/cnpj/v1/${cnpj}`
+            );
 
-    document.getElementById(
-      "razaoSocial"
-    ).value =
-      dados.razao_social || '';
+        const dados =
+            await resposta.json();
 
-    document.getElementById(
-      "nomeFantasia"
-    ).value =
-      dados.nome_fantasia || '';
+        document.getElementById("razaoSocial").value =
+            dados.razao_social || '';
+
+        document.getElementById("nomeFantasia").value =
+            dados.nome_fantasia || '';
+
+        document.getElementById("cidade").value =
+            dados.municipio || '';
+
+        document.getElementById("uf").value =
+            dados.uf || '';
+
+        document.getElementById("cep").value =
+            dados.cep || '';
+
+        document.getElementById("telefone").value =
+            dados.ddd_telefone_1 || '';
+
+        document.getElementById("situacao").value =
+            dados.descricao_situacao_cadastral || '';
+
+        document.getElementById("cnae").value =
+            dados.cnae_fiscal_descricao || '';
+
+    }
+    catch(error){
+
+        alert("Não foi possível consultar o CNPJ.");
+
+    }
 
 }
 
