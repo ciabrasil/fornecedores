@@ -1,7 +1,7 @@
 /* ===================== CONFIGURAÇÃO ===================== */
 // Cole aqui a URL gerada pelo gatilho "Quando uma solicitação HTTP for recebida"
 // do seu fluxo no Power Automate.
-const POWER_AUTOMATE_URL = "COLE_AQUI_A_URL_DO_FLUXO_POWER_AUTOMATE";
+const POWER_AUTOMATE_URL = "https://default652084859ace472dbf5e46ef7be77d.8f.environment.api.powerplatform.com:443/powerautomate/automations/direct/cu/23/workflows/be9d66080fc140088bd465940b20f463/triggers/manual/paths/invoke?api-version=1&sp=%2Ftriggers%2Fmanual%2Frun&sv=1.0&sig=TqArhrd0mbALHJyAyunmE7mKrm_MKomzvZHk-c1FBg0";
 
 const TOTAL_ETAPAS = 6;
 let etapaAtual = 1;
