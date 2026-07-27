@@ -1,7 +1,8 @@
 /* ===================== CONFIGURAÇÃO ===================== */
 // Cole aqui a URL gerada pelo gatilho "Quando uma solicitação HTTP for recebida"
 // do seu fluxo no Power Automate.
-const POWER_AUTOMATE_URL = "https://default652084859ace472dbf5e46ef7be77d.8f.environment.api.powerplatform.com:443/powerautomate/automations/direct/cu/24/workflows/fb3d9aa269fd4415bb53d24087d4ba6c/triggers/manual/paths/invoke?api-version=1&sp=%2Ftriggers%2Fmanual%2Frun&sv=1.0&sig=8ucCN-LOnOeSi3Kmsye4I78pzN_kL9lOuMp_Rp0OHKY";
+const POWER_AUTOMATE_URL = "https://default652084859ace472dbf5e46ef7be77d.8f.environment.api.powerplatform.com:443/powerautomate/automations/direct/cu/23/workflows/be9d66080fc140088bd465940b20f463/triggers/manual/paths/invoke?api-version=1&sp=%2Ftriggers%2Fmanual%2Frun&sv=1.0&sig=TqArhrd0mbALHJyAyunmE7mKrm_MKomzvZHk-c1FBg0";
+const CONSULTA_CNPJ_URL = "https://default652084859ace472dbf5e46ef7be77d.8f.environment.api.powerplatform.com:443/powerautomate/automations/direct/cu/24/workflows/fb3d9aa269fd4415bb53d24087d4ba6c/triggers/manual/paths/invoke?api-version=1&sp=%2Ftriggers%2Fmanual%2Frun&sv=1.0&sig=8ucCN-LOnOeSi3Kmsye4I78pzN_kL9lOuMp_Rp0OHKY"
 
 const TOTAL_ETAPAS = 6;
 let etapaAtual = 1;
@@ -85,9 +86,19 @@ async function consultarCNPJ() {
 
     statusEl.textContent = "Consultando...";
     try {
-        const resposta = await fetch(`https://brasilapi.com.br/api/cnpj/v1/${cnpj}`);
-        if (!resposta.ok) throw new Error("CNPJ não encontrado");
-        const dados = await resposta.json();
+        // Chama o SEU fluxo do Power Automate (resolve CORS + cache + retry)
+        const resposta = await fetch(CONSULTA_CNPJ_URL, {
+            method: "POST",
+            headers: { "Content-Type": "text/plain" },   // text/plain evita o preflight/CORS
+            body: JSON.stringify({ cnpj: cnpj })
+        });
+        if (!resposta.ok) throw new Error("Falha na consulta");
+
+        // O fluxo devolve o JSON da BrasilAPI (como texto), então tratamos os dois casos
+        let dados = await resposta.json();
+        if (typeof dados === "string") {
+            dados = JSON.parse(dados);   // caso o corpo venha como string do cache
+        }
 
         document.getElementById("razaoSocial").value = dados.razao_social || "";
         document.getElementById("nomeFantasia").value = dados.nome_fantasia || dados.razao_social || "";
@@ -105,12 +116,10 @@ async function consultarCNPJ() {
         ].filter(Boolean).join(", ");
         document.getElementById("endereco").value = partesEndereco;
 
-        // NOVO: já traz os CNAEs secundários da Receita como chips
         (dados.cnaes_secundarios || []).forEach(c => {
             if (c.codigo) adicionarCnaeSecundario(c.codigo, c.descricao || "");
         });
 
-        // A BrasilAPI não retorna Inscrição Estadual/Municipal — o fornecedor completa manualmente.
         statusEl.textContent = "Dados carregados. Confira e complete o restante do formulário.";
     } catch (erro) {
         console.error(erro);
