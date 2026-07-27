@@ -304,7 +304,7 @@ async function enviarFormulario() {
     try {
         const resposta = await fetch(POWER_AUTOMATE_URL, {
             method: "POST",
-            headers: { "Content-Type": "application/json" },
+            headers: { "Content-Type": "text/plain" },
             body: JSON.stringify(payload)
         });
         if (!resposta.ok) throw new Error("Falha no envio");
