@@ -296,8 +296,8 @@ async function enviarFormulario() {
         regimeTributario: document.getElementById("regime").value,
 
         // NOVO: só vêm preenchidos quando o regime é Simples Nacional
-        anexoSimplesNacional: valor("anexoSimples"),
-        faixaSimplesNacional: valor("faixaSimples"),
+        anexo: valor("anexoSimples"),
+        faixa: valor("faixaSimples"),
 
         cnaePrincipal: document.getElementById("cnaePrincipal").value,
         cnaesSecundarios: cnaesSecundarios,
