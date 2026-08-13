@@ -15,7 +15,6 @@ function irParaFormulario() {
     document.getElementById("tela-formulario").classList.remove("oculto");
     renderStepper();
 
-    // NOVO: garante o estado correto dos botões já na etapa 1
     document.getElementById("btnVoltar").style.visibility = "hidden";
     document.getElementById("btnAvancar").classList.remove("oculto");
     document.getElementById("btnEnviar").classList.add("oculto");
@@ -86,18 +85,16 @@ async function consultarCNPJ() {
 
     statusEl.textContent = "Consultando...";
     try {
-        // Chama o SEU fluxo do Power Automate (resolve CORS + cache + retry)
         const resposta = await fetch(CONSULTA_CNPJ_URL, {
             method: "POST",
-            headers: { "Content-Type": "text/plain" },   // text/plain evita o preflight/CORS
+            headers: { "Content-Type": "text/plain" },
             body: JSON.stringify({ cnpj: cnpj })
         });
         if (!resposta.ok) throw new Error("Falha na consulta");
 
-        // O fluxo devolve o JSON da BrasilAPI (como texto), então tratamos os dois casos
         let dados = await resposta.json();
         if (typeof dados === "string") {
-            dados = JSON.parse(dados);   // caso o corpo venha como string do cache
+            dados = JSON.parse(dados);
         }
 
         document.getElementById("razaoSocial").value = dados.razao_social || "";
@@ -126,6 +123,31 @@ async function consultarCNPJ() {
         statusEl.textContent = "Não foi possível consultar. Preencha os dados manualmente.";
     }
 }
+
+/* ===================== REGIME TRIBUTÁRIO: SIMPLES NACIONAL (ANEXO/FAIXA) ===================== */
+// Mostra/oculta e torna obrigatórios os campos de Anexo e Faixa apenas quando
+// o regime selecionado for "Simples Nacional".
+const selectRegime = document.getElementById("regime");
+const campoAnexo = document.getElementById("campoAnexoSimples");
+const campoFaixa = document.getElementById("campoFaixaSimples");
+const selectAnexo = document.getElementById("anexoSimples");
+const selectFaixa = document.getElementById("faixaSimples");
+
+function atualizarCamposSimplesNacional() {
+    const ehSimplesNacional = selectRegime.value === "Simples Nacional";
+
+    campoAnexo.classList.toggle("oculto", !ehSimplesNacional);
+    campoFaixa.classList.toggle("oculto", !ehSimplesNacional);
+
+    selectAnexo.required = ehSimplesNacional;
+    selectFaixa.required = ehSimplesNacional;
+
+    if (!ehSimplesNacional) {
+        selectAnexo.value = "";
+        selectFaixa.value = "";
+    }
+}
+selectRegime.addEventListener("change", atualizarCamposSimplesNacional);
 
 /* ===================== CNAEs SECUNDÁRIOS ===================== */
 async function carregarListaCnae() {
@@ -197,7 +219,6 @@ function renderChipsCnae() {
 }
 
 /* ===================== TRIBUTOS APLICÁVEIS (ETAPA 2) ===================== */
-// NOVO: o campo de % só fica habilitado quando o tributo é marcado.
 function configurarTributos() {
     document.querySelectorAll(".chk-tributo").forEach(chk => {
         chk.addEventListener("change", () => {
@@ -210,7 +231,6 @@ function configurarTributos() {
     });
 }
 
-// NOVO: monta a lista só dos tributos que o fornecedor marcou.
 function coletarTributos() {
     const marcados = [];
     document.querySelectorAll(".chk-tributo:checked").forEach(chk => {
@@ -255,7 +275,6 @@ async function enviarFormulario() {
     const arquivoInput = document.getElementById("planilhaProdutos");
     const arquivoBase64 = await arquivoParaBase64(arquivoInput.files[0]);
 
-    // NOVO: lê os tributos marcados
     const tributosAplicaveis = coletarTributos();
     const valor = (id) => {
         const el = document.getElementById(id);
@@ -275,10 +294,14 @@ async function enviarFormulario() {
         telefone: document.getElementById("telefone").value,
         email: document.getElementById("email").value,
         regimeTributario: document.getElementById("regime").value,
+
+        // NOVO: só vêm preenchidos quando o regime é Simples Nacional
+        anexoSimplesNacional: valor("anexoSimples"),
+        faixaSimplesNacional: valor("faixaSimples"),
+
         cnaePrincipal: document.getElementById("cnaePrincipal").value,
         cnaesSecundarios: cnaesSecundarios,
 
-        // NOVO: tributos aplicáveis (checkbox + %). Envia lista + campos individuais.
         tributosAplicaveis: tributosAplicaveis,
         aliquotaIcms: valor("aliquotaIcms"),
         aliquotaIpi: valor("aliquotaIpi"),
@@ -329,5 +352,4 @@ async function enviarFormulario() {
 }
 
 /* ===================== INICIALIZAÇÃO ===================== */
-// NOVO: liga os checkboxes de tributos assim que a página carrega
 configurarTributos();
