@@ -1,0 +1,180 @@
+/* Complementos da página de homologação. Usa as cores e componentes de ../css/style.css */
+.oculto{ display:none !important; }
+.centro{ text-align:center; margin:0 auto; }
+h3{
+    color:var(--azul);
+    font-size:1.05rem;
+    margin:28px 0 8px;
+}
+#tela-carregando, #tela-erro{ text-align:center; padding:40px 10px; }
+#tela-boas-vindas .texto-intro{ margin:0 auto 18px; }
+
+.aviso{
+    padding:10px 14px;
+    border-radius:6px;
+    font-size:.9rem;
+    margin-bottom:20px;
+}
+.aviso-demo{ background:#fff7d6; border-left:4px solid #e0b100; color:#5c4a00; }
+
+.duas-colunas{
+    display:grid;
+    grid-template-columns:80px 1fr;
+    gap:12px;
+}
+
+/* Opções (rádio e caixas de seleção) em linha */
+.opcoes{
+    display:flex;
+    flex-wrap:wrap;
+    gap:8px 14px;
+}
+.opcoes label{
+    display:flex;
+    align-items:center;
+    gap:6px;
+    font-weight:500;
+    margin:0;
+    padding:8px 12px;
+    border:1px solid #d9d9d9;
+    border-radius:6px;
+    background:#fafbfc;
+    cursor:pointer;
+}
+.opcoes input{ width:auto; margin:0; }
+.opcoes label:has(input:checked){ border-color:var(--azul); background:#eef4fa; color:var(--azul); }
+
+/* Tabelas de preenchimento (contatos, representantes, referências) */
+.tabela-rolagem{ overflow-x:auto; }
+.tabela-campos{
+    width:100%;
+    border-collapse:collapse;
+    min-width:640px;
+}
+.tabela-campos th{
+    text-align:left;
+    font-size:.82rem;
+    color:#555;
+    padding:6px 6px 8px;
+    border-bottom:2px solid #e5e5e5;
+}
+.tabela-campos td{ padding:5px 4px; vertical-align:middle; }
+.tabela-campos td:first-child{ font-weight:600; font-size:.88rem; white-space:nowrap; }
+.tabela-campos input{ padding:9px; }
+
+/* Matriz Sim / Não / N/A */
+.matriz{
+    border:1px solid #e5e5e5;
+    border-radius:8px;
+    overflow:hidden;
+    margin-bottom:16px;
+}
+.matriz-linha{
+    display:grid;
+    grid-template-columns:1fr auto;
+    align-items:center;
+    gap:12px;
+    padding:10px 14px;
+    border-bottom:1px solid #f0f0f0;
+}
+.matriz-linha:last-child{ border-bottom:none; }
+.matriz-linha:nth-child(even){ background:#fafbfc; }
+.matriz-linha .pergunta{ font-size:.92rem; color:#333; }
+.matriz-linha .opcoes label{ padding:6px 10px; font-size:.88rem; }
+.matriz-linha.faltando{ background:#fff1f0; }
+
+/* Documentos */
+.resumo-docs{
+    display:flex;
+    flex-wrap:wrap;
+    gap:10px;
+    margin-bottom:16px;
+}
+.resumo-docs span{
+    padding:6px 12px;
+    border-radius:20px;
+    font-size:.85rem;
+    font-weight:600;
+    background:#eef4fa;
+    color:var(--azul);
+}
+.resumo-docs span.alerta{ background:#fff1f0; color:#b3261e; }
+.resumo-docs span.ok{ background:#f3f8dc; color:#4f5d00; }
+.lista-docs{ display:flex; flex-direction:column; gap:10px; }
+.doc{
+    display:grid;
+    grid-template-columns:44px 1fr 260px;
+    gap:14px;
+    align-items:center;
+    border:1px solid #e5e5e5;
+    border-radius:8px;
+    padding:12px 14px;
+    background:#fff;
+}
+.doc.enviado{ border-color:var(--verde); background:#fbfdf2; }
+.doc .num{
+    font-weight:700;
+    color:var(--azul);
+    font-size:1.05rem;
+    text-align:center;
+}
+.doc .titulo{ font-weight:600; font-size:.93rem; color:#222; }
+.doc .meta{ font-size:.8rem; color:#666; margin-top:4px; display:flex; gap:8px; flex-wrap:wrap; align-items:center; }
+.selo{
+    display:inline-block;
+    padding:2px 8px;
+    border-radius:10px;
+    font-size:.72rem;
+    font-weight:700;
+    text-transform:uppercase;
+    letter-spacing:.02em;
+}
+.selo.obrigatorio{ background:#fff1f0; color:#b3261e; }
+.selo.condicional{ background:#fff7d6; color:#7a5d00; }
+.selo.adicional{ background:#eef4fa; color:var(--azul); }
+.selo.estado{ background:#f0f0f0; color:#555; }
+.selo.estado.ok{ background:#f3f8dc; color:#4f5d00; }
+.doc .acoes{ display:flex; flex-direction:column; gap:6px; }
+.doc .acoes input[type=date]{ padding:7px; font-size:.85rem; }
+.doc .acoes label.botao-arquivo{
+    display:block;
+    text-align:center;
+    background:var(--azul);
+    color:#fff;
+    padding:9px 12px;
+    border-radius:6px;
+    font-size:.88rem;
+    cursor:pointer;
+    margin:0;
+}
+.doc.enviado .acoes label.botao-arquivo{ background:#e5e5e5; color:#333; }
+.doc .acoes input[type=file]{ display:none; }
+.doc .progresso{ font-size:.8rem; color:#555; min-height:1em; }
+.doc .progresso.erro{ color:#b3261e; }
+.rotulo-pequeno{ font-size:.75rem; color:#666; font-weight:600; margin:0; }
+
+/* Declarações */
+.declaracoes{ display:flex; flex-direction:column; gap:8px; margin-bottom:10px; }
+.declaracoes label{
+    display:flex;
+    gap:10px;
+    align-items:flex-start;
+    font-weight:500;
+    line-height:1.45;
+    padding:10px 12px;
+    border:1px solid #e5e5e5;
+    border-radius:6px;
+    cursor:pointer;
+    margin:0;
+}
+.declaracoes input{ width:auto; margin-top:3px; }
+.declaracoes label:has(input:checked){ border-color:var(--verde); background:#fbfdf2; }
+
+.campo-erro{ border-color:#b3261e !important; background:#fff7f6; }
+
+@media(max-width:768px){
+    .doc{ grid-template-columns:36px 1fr; }
+    .doc .acoes{ grid-column:1 / 3; }
+    .matriz-linha{ grid-template-columns:1fr; }
+    .stepper-item{ font-size:.58rem; }
+}

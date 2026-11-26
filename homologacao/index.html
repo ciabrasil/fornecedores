@@ -1,0 +1,269 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="robots" content="noindex, nofollow">
+<title>Homologação de Fornecedores - Ciabrasil</title>
+<link rel="stylesheet" href="../css/style.css">
+<link rel="stylesheet" href="css/homologacao.css">
+</head>
+<body>
+<div class="container">
+
+    <div class="topo">
+        <img src="../logo-ciabrasil.png" alt="Ciabrasil">
+        <div>
+            <h1>Homologação de Fornecedores</h1>
+            <div class="subtitulo">Questionário de cadastro (FR-SUP-001) e envio de documentos</div>
+        </div>
+    </div>
+
+    <div id="faixa-demo" class="aviso aviso-demo oculto">
+        Modo de demonstração: nada é gravado e os envios são simulados.
+    </div>
+
+    <!-- CARREGANDO -->
+    <div id="tela-carregando" class="tela">
+        <p class="texto-intro centro">Carregando o seu processo de homologação...</p>
+    </div>
+
+    <!-- LINK INVÁLIDO -->
+    <div id="tela-erro" class="tela oculto">
+        <h2>Link inválido ou expirado</h2>
+        <p class="texto-intro centro" id="mensagemErro">
+            Não encontramos um processo de homologação ativo para este link.
+            Confira se abriu o endereço completo enviado no e-mail de convite ou fale com o Suprimentos da Ciabrasil.
+        </p>
+    </div>
+
+    <!-- BOAS-VINDAS -->
+    <div id="tela-boas-vindas" class="tela oculto">
+        <h2>Bem-vindo(a)</h2>
+        <p class="texto-intro">
+            A Ciabrasil iniciou o processo de homologação da <strong id="bvRazao"></strong>
+            (processo <strong id="bvCodigo"></strong>). São duas partes: o <strong>questionário de cadastro</strong>,
+            com preenchimento automático a partir do CNPJ, e o <strong>envio dos documentos</strong> pedidos para o seu tipo de fornecimento.
+        </p>
+        <p class="texto-intro">
+            O preenchimento leva cerca de 20 minutos. Os documentos podem ser enviados agora ou depois, pelo mesmo link,
+            enquanto o processo estiver aberto.
+        </p>
+        <button class="btn-primario" onclick="iniciar()">Iniciar</button>
+    </div>
+
+    <!-- FORMULÁRIO -->
+    <div id="tela-formulario" class="tela oculto">
+        <div class="stepper" id="stepper"></div>
+
+        <form id="form-homologacao" onsubmit="return false">
+
+            <!-- ETAPA 1 -->
+            <section class="step" data-step="1">
+                <h2>Etapa 1 — Identificação da empresa</h2>
+                <div class="grid">
+                    <div class="full">
+                        <label for="cnpj">CNPJ *</label>
+                        <input id="cnpj" required readonly>
+                        <p class="ajuda">O CNPJ vem do convite. Se estiver incorreto, fale com o Suprimentos antes de continuar.</p>
+                    </div>
+                    <div class="full">
+                        <button type="button" class="btn-consultar" onclick="consultarCNPJ()">Preencher com os dados da Receita</button>
+                        <span id="statusConsulta" class="status-consulta"></span>
+                    </div>
+                    <div class="full"><label for="razaoSocial">Razão social *</label><input id="razaoSocial" required></div>
+                    <div class="full"><label for="nomeFantasia">Nome fantasia</label><input id="nomeFantasia"></div>
+                    <div><label for="inscricaoEstadual">Inscrição estadual</label><input id="inscricaoEstadual" placeholder="Isento, se for o caso"></div>
+                    <div><label for="inscricaoMunicipal">Inscrição municipal</label><input id="inscricaoMunicipal"></div>
+                    <div><label for="dataFundacao">Data de fundação</label><input id="dataFundacao" type="date"></div>
+                    <div><label for="cnaePrincipal">CNAE principal</label><input id="cnaePrincipal"></div>
+                    <div class="full"><label for="endereco">Endereço (logradouro, número, complemento, bairro) *</label><input id="endereco" required></div>
+                    <div><label for="cidade">Cidade *</label><input id="cidade" required></div>
+                    <div class="duas-colunas">
+                        <div><label for="uf">UF *</label><input id="uf" required maxlength="2"></div>
+                        <div><label for="cep">CEP *</label><input id="cep" required maxlength="9" placeholder="00000-000"></div>
+                    </div>
+                    <div><label for="telefone">Telefone *</label><input id="telefone" required></div>
+                    <div><label for="site">Site</label><input id="site" placeholder="www.empresa.com.br"></div>
+                    <div>
+                        <label for="regime">Regime tributário *</label>
+                        <select id="regime" required>
+                            <option value="">Selecione...</option>
+                            <option>Simples Nacional</option>
+                            <option>Lucro Presumido</option>
+                            <option>Lucro Real</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label for="porte">Porte *</label>
+                        <select id="porte" required>
+                            <option value="">Selecione...</option>
+                            <option>ME</option>
+                            <option>EPP</option>
+                            <option>Médio</option>
+                            <option>Grande</option>
+                        </select>
+                    </div>
+                </div>
+            </section>
+
+            <!-- ETAPA 2 -->
+            <section class="step oculto" data-step="2">
+                <h2>Etapa 2 — Contatos e representantes</h2>
+                <p class="ajuda">Informe pelo menos o contato comercial. Os demais ajudam a direcionar cada assunto para a pessoa certa.</p>
+                <div class="tabela-rolagem">
+                    <table class="tabela-campos" id="tabelaContatos">
+                        <thead><tr><th>Área</th><th>Nome</th><th>Cargo</th><th>E-mail</th><th>Telefone</th></tr></thead>
+                        <tbody></tbody>
+                    </table>
+                </div>
+
+                <h3>Representantes legais *</h3>
+                <p class="ajuda">Preenchido com o quadro de sócios da Receita quando disponível. Confira e complete.</p>
+                <div class="tabela-rolagem">
+                    <table class="tabela-campos" id="tabelaRepresentantes">
+                        <thead><tr><th>Nome completo</th><th>Cargo / qualificação</th><th>E-mail</th><th>Telefone</th></tr></thead>
+                        <tbody></tbody>
+                    </table>
+                </div>
+            </section>
+
+            <!-- ETAPA 3 -->
+            <section class="step oculto" data-step="3">
+                <h2>Etapa 3 — Dados bancários</h2>
+                <p class="info-tributos">A conta deve estar em nome da empresa. Não são aceitas contas de pessoa física, sócios ou terceiros.</p>
+                <div class="grid">
+                    <div><label for="banco">Banco *</label><input id="banco" required></div>
+                    <div><label for="agencia">Agência *</label><input id="agencia" required></div>
+                    <div><label for="conta">Conta *</label><input id="conta" required></div>
+                    <div>
+                        <label for="tipoConta">Tipo de conta *</label>
+                        <select id="tipoConta" required>
+                            <option value="">Selecione...</option>
+                            <option>Corrente</option>
+                            <option>Poupança</option>
+                        </select>
+                    </div>
+                    <div><label for="titular">Titular da conta *</label><input id="titular" required></div>
+                    <div><label for="chavePix">Chave PIX (CNPJ)</label><input id="chavePix"></div>
+                </div>
+            </section>
+
+            <!-- ETAPA 4 -->
+            <section class="step oculto" data-step="4">
+                <h2>Etapa 4 — Escopo e capacidade</h2>
+                <div class="grid">
+                    <div class="full">
+                        <label>Tipo de fornecimento *</label>
+                        <div class="opcoes" id="tipoFornecimento" data-obrigatorio="Tipo de fornecimento"></div>
+                    </div>
+                    <div class="full"><label for="descricaoFornecimento">Descrição dos materiais, equipamentos ou serviços oferecidos *</label><textarea id="descricaoFornecimento" required></textarea></div>
+                    <div><label for="locais">Locais de fabricação ou execução</label><textarea id="locais"></textarea></div>
+                    <div><label for="capacidade">Capacidade produtiva ou de atendimento</label><textarea id="capacidade"></textarea></div>
+                    <div class="full">
+                        <label>Utiliza subfornecedores ou subcontratados? *</label>
+                        <div class="opcoes" id="usaSubfornecedores" data-obrigatorio="Utiliza subfornecedores"></div>
+                    </div>
+                    <div class="full oculto" id="campoSubfornecedores">
+                        <label for="subfornecedores">Quais e para qual escopo? *</label>
+                        <textarea id="subfornecedores"></textarea>
+                    </div>
+                </div>
+                <h3>Principais clientes com escopo semelhante</h3>
+                <p class="ajuda">Referências que poderão ser consultadas pela Ciabrasil.</p>
+                <div class="tabela-rolagem">
+                    <table class="tabela-campos" id="tabelaReferencias">
+                        <thead><tr><th>Empresa cliente</th><th>Escopo fornecido</th><th>Contato</th><th>Telefone / e-mail</th></tr></thead>
+                        <tbody></tbody>
+                    </table>
+                </div>
+            </section>
+
+            <!-- ETAPA 5 -->
+            <section class="step oculto" data-step="5">
+                <h2>Etapa 5 — Sistema da qualidade</h2>
+                <div class="grid">
+                    <div class="full">
+                        <label>Possui certificação ISO 9001? *</label>
+                        <div class="opcoes" id="iso9001" data-obrigatorio="Certificação ISO 9001"></div>
+                    </div>
+                    <div class="full oculto" id="campoIso"><label for="isoCertificador">Organismo certificador e validade do certificado</label><input id="isoCertificador"></div>
+                    <div class="full">
+                        <label>Outras certificações</label>
+                        <div class="opcoes" id="outrasCert"></div>
+                    </div>
+                </div>
+                <h3>Controles da qualidade *</h3>
+                <div class="matriz" id="matrizQualidade"></div>
+                <p class="ajuda">A ausência de certificação ISO 9001 não impede a homologação, desde que existam controles equivalentes adequados ao risco.</p>
+            </section>
+
+            <!-- ETAPA 6 -->
+            <section class="step oculto" data-step="6">
+                <h2>Etapa 6 — Saúde, segurança e meio ambiente</h2>
+                <div class="matriz" id="matrizSst"></div>
+                <div class="grid">
+                    <div><label for="acidentes">Acidentes com afastamento nos últimos 12 meses *</label><input id="acidentes" type="number" min="0" step="1" required></div>
+                    <div><label for="obitos">Óbitos nos últimos 36 meses *</label><input id="obitos" type="number" min="0" step="1" required></div>
+                </div>
+            </section>
+
+            <!-- ETAPA 7 -->
+            <section class="step oculto" data-step="7">
+                <h2>Etapa 7 — Documentos</h2>
+                <p class="info-tributos">
+                    Envie cada documento no campo correspondente. Formatos aceitos: PDF, JPG ou PNG, até 20 MB por arquivo.
+                    Cada arquivo é enviado na hora em que você o escolhe. Se algum documento ainda não estiver pronto,
+                    você pode concluir o questionário e enviar o restante depois, pelo mesmo link.
+                </p>
+                <div id="resumoDocumentos" class="resumo-docs"></div>
+                <div id="listaDocumentos" class="lista-docs"></div>
+            </section>
+
+            <!-- ETAPA 8 -->
+            <section class="step oculto" data-step="8">
+                <h2>Etapa 8 — Declarações e envio</h2>
+                <p class="ajuda">Todas as declarações são necessárias para a homologação.</p>
+                <div id="listaDeclaracoes" class="declaracoes"></div>
+                <h3>Responsável pelas informações *</h3>
+                <div class="grid">
+                    <div><label for="respNome">Nome do representante legal *</label><input id="respNome" required></div>
+                    <div><label for="respCargo">Cargo *</label><input id="respCargo" required></div>
+                    <div><label for="respEmail">E-mail *</label><input id="respEmail" type="email" required></div>
+                    <div><label for="respTelefone">Telefone</label><input id="respTelefone"></div>
+                </div>
+            </section>
+
+            <div class="navegacao">
+                <button type="button" id="btnVoltar" class="btn-secundario" onclick="mudarEtapa(-1)">Voltar</button>
+                <button type="button" id="btnAvancar" class="btn-primario" onclick="mudarEtapa(1)">Avançar</button>
+                <button type="button" id="btnEnviar" class="btn-enviar oculto" onclick="enviarQuestionario()">Enviar questionário</button>
+            </div>
+        </form>
+    </div>
+
+    <!-- SÓ DOCUMENTOS (questionário já enviado) -->
+    <div id="tela-documentos" class="tela oculto">
+        <h2>Documentos do processo <span id="docCodigo"></span></h2>
+        <p class="texto-intro">
+            O questionário da <strong id="docRazao"></strong> já foi recebido. Use esta página para enviar os documentos que faltam
+            ou substituir um documento vencido.
+        </p>
+        <div id="resumoDocumentos2" class="resumo-docs"></div>
+        <div id="listaDocumentos2" class="lista-docs"></div>
+    </div>
+
+    <!-- SUCESSO -->
+    <div id="tela-sucesso" class="tela oculto">
+        <h2>Questionário enviado com sucesso!</h2>
+        <p class="texto-intro" id="textoSucesso">
+            Obrigado. O Suprimentos da Ciabrasil vai analisar as informações e os documentos e entrará em contato se precisar de algo.
+        </p>
+        <p class="texto-intro" id="textoPendentes"></p>
+    </div>
+
+</div>
+<script src="js/config.js"></script>
+<script src="js/homologacao.js"></script>
+</body>
+</html>
