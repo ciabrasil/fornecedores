@@ -404,7 +404,7 @@ function renderDocumentos(listaId, resumoId) {
         const div = document.createElement("div");
         div.className = "doc" + (est.ok ? " enviado" : "");
         div.innerHTML = `
-            <div class="num">${d.item === 99 ? "+" : String(d.item).padStart(2, "0")}</div>
+            <div class="num">${d.item >= 99 ? "+" : String(d.item).padStart(2, "0")}</div>
             <div>
                 <div class="titulo">${escapar(d.documento)}</div>
                 <div class="meta">
