@@ -377,6 +377,7 @@ const ESTADOS = {
     "Recebido": { texto: "Enviado - em análise", ok: true, envia: true },
     "Conforme": { texto: "Aceito pela Ciabrasil", ok: true, envia: true },
     "Não conforme": { texto: "Reenviar - não aceito", ok: false, envia: true },
+    "Vencido": { texto: "Reenviar - vencido", ok: false, envia: true },
     "NA": { texto: "Não aplicável", ok: true, envia: false }
 };
 // Item 8 (declarações) é atendido pela etapa 8 do próprio questionário: não há arquivo a enviar.
